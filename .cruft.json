@@ -1,0 +1,24 @@
+{
+  "template": "/Users/cmutel/Code/Brightway/cookiecutter-brightwaylib",
+  "commit": "c7aaac82b7465d91c1417b9ddaf634ebaab43ec5",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "full_name": "Chris Mutel",
+      "email": "cmutel@gmail.com",
+      "github_username": "brightway-lca",
+      "project_name": "bw_interface_schemas",
+      "package_name": "bw_interface_schemas",
+      "project_short_description": "Interface schemas for data transfer in Brightway",
+      "version": "0.0.1",
+      "use_pytest": "y",
+      "open_source_license": "MIT",
+      "copyright_year": "2024",
+      "_copy_without_render": [
+        ".github/*"
+      ],
+      "_template": "/Users/cmutel/Code/Brightway/cookiecutter-brightwaylib"
+    }
+  },
+  "directory": null
+}
