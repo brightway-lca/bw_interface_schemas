@@ -2,7 +2,22 @@
 
 __all__ = (
     "__version__",
-    # Add functions and variables you want exposed in `bw_interface_schemas.` namespace here
+    "CombinedProcessWithReferenceProduct",
+    "ElementaryFlow",
+    "Node",
+    "Process",
+    "Product",
+    "Source",
 )
 
 __version__ = "0.0.1"
+
+
+from .lci import (
+    CombinedProcessWithReferenceProduct,
+    ElementaryFlow,
+    Node,
+    Process,
+    Product,
+    Source,
+)
