@@ -4,7 +4,14 @@ from pydantic import BaseModel, ConfigDict, JsonValue
 from datetime import datetime
 
 
-class Source(BaseModel):
+class Parsimonius(BaseModel):
+    """Change defaule `model_dump` behaviour to not export unset values by default"""
+
+    def model_dump(self, exclude_unset=True, *args, **kwargs):
+        return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
+
+
+class Source(Parsimonius):
     """A data source, such as a publication or field measurement.
 
     Very preliminary."""
@@ -14,12 +21,22 @@ class Source(BaseModel):
     title: str
     doi: Optional[str] = None
 
-    def model_dump(self, exclude_unset=True, *args, **kwargs):
-        """Make `exclude_unset` True by default."""
-        return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
+
+class Edge(Parsimonius):
+    """An quantitative edge linking two nodes in the graph."""
+    source: 'Node'
+    target: 'Node'
+    amount: float
+    uncertainty_type: Optional[int] = None
+    loc: Optional[float] = None
+    scale: Optional[float] = None
+    shape: Optional[float] = None
+    minimum: Optional[float] = None
+    maximum: Optional[float] = None
+    negative: Optional[bool] = None
 
 
-class Node(BaseModel):
+class Node(Parsimonius):
     # Combination of database and code uniquely identifies a node
     code: str
     database: str
@@ -35,14 +52,11 @@ class Node(BaseModel):
     references: Optional[list[Source]] = None
     # Was previously classifications - we want a more generic categorical set
     tags: Optional[dict[str, JsonValue]] = None
+    exchanges: list[Edge] = []
 
     model_config = ConfigDict(
         extra="allow",
     )
-
-    def model_dump(self, exclude_unset=True, *args, **kwargs):
-        """Make `exclude_unset` True by default."""
-        return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
 
 
 class Process(Node):
