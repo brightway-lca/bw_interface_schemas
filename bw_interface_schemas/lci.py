@@ -1,3 +1,4 @@
+from numbers import Number
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, JsonValue
@@ -6,6 +7,10 @@ from datetime import datetime
 
 class Parsimonius(BaseModel):
     """Change defaule `model_dump` behaviour to not export unset values by default"""
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
 
     def model_dump(self, exclude_unset=True, *args, **kwargs):
         return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
@@ -22,11 +27,9 @@ class Source(Parsimonius):
     doi: Optional[str] = None
 
 
-class Edge(Parsimonius):
-    """An quantitative edge linking two nodes in the graph."""
-    source: 'Node'
-    target: 'Node'
-    amount: float
+class UncertaintyDistribution(Parsimonius):
+    """Separate out the fields used in uncertainty distributions"""
+    amount: Number
     uncertainty_type: Optional[int] = None
     loc: Optional[float] = None
     scale: Optional[float] = None
@@ -34,6 +37,12 @@ class Edge(Parsimonius):
     minimum: Optional[float] = None
     maximum: Optional[float] = None
     negative: Optional[bool] = None
+
+
+class Edge(UncertaintyDistribution):
+    """An quantitative edge linking two nodes in the graph."""
+    source: 'Node'
+    target: 'Node'
 
 
 class Node(Parsimonius):
@@ -47,16 +56,14 @@ class Node(Parsimonius):
     unit: Optional[str] = None
     location: Optional[str] = None
     type: Optional[str] = None
+    # Comment can be a single string or something more structured.
     comment: Optional[str | dict[str, str]] = None
     filename: Optional[str] = None
     references: Optional[list[Source]] = None
-    # Was previously classifications - we want a more generic categorical set
+    # Was previously classifications - we want something more generic
+    # Tags are chosen from defined set of possibilities
     tags: Optional[dict[str, JsonValue]] = None
     exchanges: list[Edge] = []
-
-    model_config = ConfigDict(
-        extra="allow",
-    )
 
 
 class Process(Node):
@@ -70,7 +77,7 @@ class Process(Node):
     # TBD: Time range?
 
 
-class CombinedProcessWithReferenceProduct(Process):
+class ProcessWithReferenceProduct(Process):
     """Chimaera which serves as both a product and a process in the graph."""
 
     # Was previously "reference product", need the underscore here
@@ -86,7 +93,8 @@ class Product(Node):
     unit: str
     # Some products are the same globally, other have specific local properties
     location: Optional[str] = None
-    properties: list  # TBD
+    # Properties are quantitative; use tags to choose from a set of possible values
+    properties: dict[str, Number]
 
 
 class ElementaryFlow(Node):
