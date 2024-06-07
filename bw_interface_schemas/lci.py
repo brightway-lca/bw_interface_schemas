@@ -43,6 +43,9 @@ class Edge(UncertaintyDistribution):
     """An quantitative edge linking two nodes in the graph."""
     source: 'Node'
     target: 'Node'
+    # The people want freedom
+    properties: dict[str, Number]
+    tags: Optional[dict[str, JsonValue]] = None
 
 
 class Node(Parsimonius):
@@ -86,6 +89,8 @@ class ProcessWithReferenceProduct(Process):
     # Duplicates information in the exchanges.
     # Should be net amount.
     production_amount: Optional[float] = None
+    # Properties for reference product
+    properties: dict[str, Number]
 
 
 class Product(Node):
