@@ -15,7 +15,7 @@ class Parsimonius(BaseModel):
         return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
 
 
-class Source(Parsimonius):
+class DataSource(Parsimonius):
     """A data source, such as a publication or field measurement.
 
     Very preliminary."""
@@ -61,7 +61,7 @@ class Node(Parsimonius):
     # Comment can be a single string or something more structured.
     comment: Optional[str | dict[str, str]] = None
     filename: Optional[str] = None
-    references: Optional[list[Source]] = None
+    references: Optional[list[DataSource]] = None
     # Was previously classifications - we want something more generic
     # Tags are chosen from defined set of possibilities
     tags: Optional[dict[str, JsonValue]] = None
