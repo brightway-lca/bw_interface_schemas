@@ -40,6 +40,7 @@ class UncertaintyDistribution(Parsimonius):
 
 class Edge(UncertaintyDistribution):
     """An quantitative edge linking two nodes in the graph."""
+    edge_type: str = Field(alias="type")
     source: 'Node'
     target: 'Node'
     # The people want freedom
