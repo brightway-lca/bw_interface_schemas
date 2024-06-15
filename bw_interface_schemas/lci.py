@@ -82,17 +82,19 @@ class Process(Node):
 class ProcessWithReferenceProduct(Process):
     """Chimaera which serves as both a product and a process in the graph."""
 
-    # Was previously "reference product", need the underscore here
+    # Use `ProcessWithReferenceProduct.model_dump(by_alias=True)`
+    # to get a dictionary using the alias field
     reference_product: str = Field(alias="reference product")
     # Optional name for the amount of reference product produced.
     # Duplicates information in the exchanges.
     # Should be net amount.
     production_amount: Optional[float] = None
     # Properties for reference product
-    properties: dict[str, Union[float, int]]
+    properties: Optional[dict[str, Union[float, int]]] = None
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(
+        populate_by_name=False,
+    )
 
 
 class Product(Node):
