@@ -107,7 +107,7 @@ class Product(Node):
 
 
 class ElementaryFlow(Node):
-    # Should be context, this is for backwards compatibility
-    categories: list[str]
+    # Previously called categories in Brightway
+    context: list[str]
     name: str
     unit: str
