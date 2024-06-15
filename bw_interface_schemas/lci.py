@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel, ConfigDict, JsonValue
+from pydantic import BaseModel, ConfigDict, JsonValue, Field
 from datetime import datetime
 
 
@@ -83,13 +83,16 @@ class ProcessWithReferenceProduct(Process):
     """Chimaera which serves as both a product and a process in the graph."""
 
     # Was previously "reference product", need the underscore here
-    reference_product: str
+    reference_product: str = Field(alias="reference product")
     # Optional name for the amount of reference product produced.
     # Duplicates information in the exchanges.
     # Should be net amount.
     production_amount: Optional[float] = None
     # Properties for reference product
     properties: dict[str, Union[float, int]]
+
+    class Config:
+        populate_by_name = True
 
 
 class Product(Node):
