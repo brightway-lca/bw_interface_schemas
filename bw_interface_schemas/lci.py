@@ -57,7 +57,7 @@ class Node(Parsimonius):
     name: Optional[str] = None
     unit: Optional[str] = None
     location: Optional[str] = None
-    type: Optional[str] = None
+    node_type: Optional[str] = Field(alias="type", default=None)
     # Comment can be a single string or something more structured.
     comment: Optional[str | dict[str, str]] = None
     filename: Optional[str] = None
