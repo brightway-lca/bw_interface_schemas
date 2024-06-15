@@ -2,7 +2,7 @@
 
 __all__ = (
     "__version__",
-    "CombinedProcessWithReferenceProduct",
+    "ProcessWithReferenceProduct",
     "ElementaryFlow",
     "Node",
     "Process",
@@ -14,7 +14,7 @@ __version__ = "0.0.1"
 
 
 from .lci import (
-    CombinedProcessWithReferenceProduct,
+    ProcessWithReferenceProduct,
     ElementaryFlow,
     Node,
     Process,
