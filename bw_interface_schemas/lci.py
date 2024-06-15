@@ -1,5 +1,4 @@
-from numbers import Number
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel, ConfigDict, JsonValue
 from datetime import datetime
@@ -29,7 +28,7 @@ class Source(Parsimonius):
 
 class UncertaintyDistribution(Parsimonius):
     """Separate out the fields used in uncertainty distributions"""
-    amount: Number
+    amount: float
     uncertainty_type: Optional[int] = None
     loc: Optional[float] = None
     scale: Optional[float] = None
@@ -44,7 +43,7 @@ class Edge(UncertaintyDistribution):
     source: 'Node'
     target: 'Node'
     # The people want freedom
-    properties: dict[str, Number]
+    properties: dict[str, Union[float, int]]
     tags: Optional[dict[str, JsonValue]] = None
 
 
@@ -90,7 +89,7 @@ class ProcessWithReferenceProduct(Process):
     # Should be net amount.
     production_amount: Optional[float] = None
     # Properties for reference product
-    properties: dict[str, Number]
+    properties: dict[str, Union[float, int]]
 
 
 class Product(Node):
@@ -99,7 +98,7 @@ class Product(Node):
     # Some products are the same globally, other have specific local properties
     location: Optional[str] = None
     # Properties are quantitative; use tags to choose from a set of possible values
-    properties: dict[str, Number]
+    properties: dict[str, Union[float, int]]
 
 
 class ElementaryFlow(Node):
