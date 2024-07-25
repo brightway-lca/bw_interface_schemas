@@ -1,3 +1,6 @@
+import json
+import re
+from pathlib import Path
 from typing import Optional, Union
 
 from pydantic import BaseModel, ConfigDict, JsonValue, Field
@@ -112,3 +115,11 @@ class ElementaryFlow(Node):
     context: list[str]
     name: str
     unit: str
+
+
+if __name__ == "__main__":
+    hiss = lambda name: re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+    dirpath = Path(__file__).parent / "json_schema"
+    for cls in (ElementaryFlow, Product, ProcessWithReferenceProduct, Process, Node, Edge):
+        with open(dirpath / (hiss(cls.__name__) + ".json"), "w") as f:
+            json.dump(cls.model_json_schema(), f, indent=2, ensure_ascii=False)
