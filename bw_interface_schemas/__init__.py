@@ -5,19 +5,22 @@ __all__ = (
     "ProcessWithReferenceProduct",
     "ElementaryFlow",
     "Node",
+    "Edge",
     "Process",
     "Product",
-    "Source",
+    "DataSource",
 )
 
 __version__ = "0.1.0"
 
 
 from .lci import (
-    ProcessWithReferenceProduct,
+    DataSource,
+    Edge,
     ElementaryFlow,
     Node,
     Process,
+    ProcessWithReferenceProduct,
     Product,
-    Source,
 )
+

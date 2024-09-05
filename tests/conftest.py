@@ -4,7 +4,13 @@ import pytest
 
 
 @pytest.fixture
-def process():
+def basic_lci_as_dict():
     return {
-        'name': 'the name',
+        # Process fields
+        "name": "a process name",
+        "unit": "a unit",
+        "location": "a location",
+        # Node fields
+        "code": "a code",
+        "database": "a database",
     }
