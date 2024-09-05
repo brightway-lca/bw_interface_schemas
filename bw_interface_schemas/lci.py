@@ -63,7 +63,7 @@ class Node(Parsimonius):
     location: Optional[str] = None
     node_type: Optional[str] = Field(alias="type", default=None)
     # Comment can be a single string or something more structured.
-    comment: Optional[str | dict[str, str]] = None
+    comment: Union[str, dict[str, str], None] = None
     filename: Optional[str] = None
     references: Optional[list[DataSource]] = None
     # Was previously classifications - we want something more generic
