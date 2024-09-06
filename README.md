@@ -49,3 +49,24 @@ please [file an issue][Issue Tracker] along with a detailed description.
 [License]: https://github.com/brightway-lca/bw_interface_schemas/blob/main/LICENSE
 [Contributor Guide]: https://github.com/brightway-lca/bw_interface_schemas/blob/main/CONTRIBUTING.md
 [Issue Tracker]: https://github.com/brightway-lca/bw_interface_schemas/issues
+
+
+## Building the Documentation
+
+You can build the documentation locally by installing the documentation Conda environment:
+
+```bash
+conda env create -f docs/environment.yml
+```
+
+activating the environment
+
+```bash
+conda activate sphinx_bw_interface_schemas
+```
+
+and [running the build command](https://www.sphinx-doc.org/en/master/man/sphinx-build.html#sphinx-build):
+
+```bash
+sphinx-build docs _build/html --builder=html --jobs=auto --write-all; open _build/html/index.html
+```
