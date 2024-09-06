@@ -1,5 +1,5 @@
 {
-  "template": "/Users/cmutel/Code/Brightway/cookiecutter-brightwaylib",
+  "template": "https://github.com/brightway-lca/cookiecutter-brightwaylib",
   "commit": "c7aaac82b7465d91c1417b9ddaf634ebaab43ec5",
   "checkout": null,
   "context": {
@@ -17,7 +17,7 @@
       "_copy_without_render": [
         ".github/*"
       ],
-      "_template": "/Users/cmutel/Code/Brightway/cookiecutter-brightwaylib"
+      "_template": "https://github.com/brightway-lca/cookiecutter-brightwaylib"
     }
   },
   "directory": null
