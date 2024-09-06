@@ -1,3 +1,7 @@
+# conf.py
+# Sphinx configuration file
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
 ### import setup ##################################################################################
 
 import datetime
@@ -34,6 +38,12 @@ exclude_patterns = ['_build']
 
 # The master toctree document.
 master_doc = 'index'
+
+### intersphinx configuration ######################################################################
+
+intersphinx_mapping = {
+    "bw": ("https://docs.brightway.dev/en/latest/", None),
+}    
 
 ### theme configuration ############################################################################
 
