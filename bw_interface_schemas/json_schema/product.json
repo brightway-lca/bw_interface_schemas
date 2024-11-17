@@ -40,319 +40,16 @@
       "title": "DataSource",
       "type": "object"
     },
-    "Edge": {
-      "additionalProperties": true,
-      "description": "An quantitative edge linking two nodes in the graph.",
-      "properties": {
-        "amount": {
-          "title": "Amount",
-          "type": "number"
-        },
-        "uncertainty_type": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Uncertainty Type"
-        },
-        "loc": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Loc"
-        },
-        "scale": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Scale"
-        },
-        "shape": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Shape"
-        },
-        "minimum": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Minimum"
-        },
-        "maximum": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Maximum"
-        },
-        "negative": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Negative"
-        },
-        "type": {
-          "title": "Type",
-          "type": "string"
-        },
-        "source": {
-          "$ref": "#/$defs/Node"
-        },
-        "target": {
-          "$ref": "#/$defs/Node"
-        },
-        "properties": {
-          "type": "object",
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "integer"
-              }
-            ]
-          },
-          "title": "Properties"
-        },
-        "tags": {
-          "anyOf": [
-            {
-              "additionalProperties": {
-                "$ref": "#/$defs/JsonValue"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Tags"
-        }
-      },
-      "required": [
-        "amount",
-        "type",
-        "source",
-        "target",
-        "properties"
-      ],
-      "title": "Edge",
-      "type": "object"
-    },
-    "JsonValue": {},
-    "Node": {
-      "additionalProperties": true,
-      "properties": {
-        "code": {
-          "title": "Code",
-          "type": "string"
-        },
-        "database": {
-          "title": "Database",
-          "type": "string"
-        },
-        "created": {
-          "anyOf": [
-            {
-              "format": "date-time",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Created"
-        },
-        "modified": {
-          "anyOf": [
-            {
-              "format": "date-time",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Modified"
-        },
-        "name": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Name"
-        },
-        "unit": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Unit"
-        },
-        "location": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Location"
-        },
-        "type": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Type"
-        },
-        "comment": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "additionalProperties": {
-                "type": "string"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Comment"
-        },
-        "filename": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Filename"
-        },
-        "references": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/$defs/DataSource"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "References"
-        },
-        "tags": {
-          "anyOf": [
-            {
-              "additionalProperties": {
-                "$ref": "#/$defs/JsonValue"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Tags"
-        },
-        "exchanges": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/Edge"
-          },
-          "title": "Exchanges",
-          "type": "array"
-        }
-      },
-      "required": [
-        "code",
-        "database"
-      ],
-      "title": "Node",
-      "type": "object"
-    }
+    "JsonValue": {}
   },
   "additionalProperties": true,
   "properties": {
-    "code": {
-      "title": "Code",
+    "name": {
+      "title": "Name",
       "type": "string"
     },
-    "database": {
-      "title": "Database",
+    "unit": {
+      "title": "Unit",
       "type": "string"
     },
     "created": {
@@ -381,14 +78,6 @@
       "default": null,
       "title": "Modified"
     },
-    "name": {
-      "title": "Name",
-      "type": "string"
-    },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
-    },
     "location": {
       "anyOf": [
         {
@@ -401,7 +90,7 @@
       "default": null,
       "title": "Location"
     },
-    "type": {
+    "node_type": {
       "anyOf": [
         {
           "type": "string"
@@ -411,7 +100,7 @@
         }
       ],
       "default": null,
-      "title": "Type"
+      "title": "Node Type"
     },
     "comment": {
       "anyOf": [
@@ -430,18 +119,6 @@
       ],
       "default": null,
       "title": "Comment"
-    },
-    "filename": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Filename"
     },
     "references": {
       "anyOf": [
@@ -473,14 +150,6 @@
       "default": null,
       "title": "Tags"
     },
-    "exchanges": {
-      "default": [],
-      "items": {
-        "$ref": "#/$defs/Edge"
-      },
-      "title": "Exchanges",
-      "type": "array"
-    },
     "properties": {
       "type": "object",
       "additionalProperties": {
@@ -497,8 +166,6 @@
     }
   },
   "required": [
-    "code",
-    "database",
     "name",
     "unit",
     "properties"

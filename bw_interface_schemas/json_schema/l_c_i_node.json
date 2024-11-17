@@ -163,21 +163,13 @@
         ]
       },
       "title": "Properties"
-    },
-    "context": {
-      "items": {
-        "type": "string"
-      },
-      "title": "Context",
-      "type": "array"
     }
   },
   "required": [
     "name",
     "unit",
-    "properties",
-    "context"
+    "properties"
   ],
-  "title": "ElementaryFlow",
+  "title": "LCINode",
   "type": "object"
 }
