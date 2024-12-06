@@ -114,13 +114,20 @@
       ],
       "title": "NodeTypes",
       "type": "string"
+    },
+    "QualitativeEdgeTypes": {
+      "enum": [
+        "belongs_to"
+      ],
+      "title": "QualitativeEdgeTypes",
+      "type": "string"
     }
   },
   "additionalProperties": true,
+  "description": "A qualitative edge linking two nodes in the graph.\n\nThe type of relationship is defined by the `edge_type`. Normally these are\ndrawn from `QualitativeEdgeTypes` but don't have to be.",
   "properties": {
     "edge_type": {
-      "title": "Edge Type",
-      "type": "string"
+      "$ref": "#/$defs/QualitativeEdgeTypes"
     },
     "source": {
       "$ref": "#/$defs/Node"
@@ -197,6 +204,6 @@
     "source",
     "target"
   ],
-  "title": "Edge",
+  "title": "QualitativeEdge",
   "type": "object"
 }

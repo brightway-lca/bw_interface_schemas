@@ -1,38 +1,21 @@
 {
   "$defs": {
-    "JsonValue": {},
-    "NodeTypes": {
-      "enum": [
-        "project",
-        "database",
-        "process",
-        "product",
-        "elementary_flow",
-        "impact_assessment_method",
-        "impact_category",
-        "normalization",
-        "weighting"
-      ],
-      "title": "NodeTypes",
-      "type": "string"
-    }
+    "JsonValue": {}
   },
   "additionalProperties": true,
   "properties": {
     "name": {
+      "items": {
+        "type": "string"
+      },
       "title": "Name",
-      "type": "string"
+      "type": "array"
     },
     "node_type": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/NodeTypes"
-        },
-        {
-          "type": "string"
-        }
-      ],
-      "title": "Node Type"
+      "const": "normalization",
+      "default": "normalization",
+      "title": "Node Type",
+      "type": "string"
     },
     "comment": {
       "anyOf": [
@@ -66,12 +49,16 @@
       ],
       "default": null,
       "title": "Tags"
+    },
+    "unit": {
+      "title": "Unit",
+      "type": "string"
     }
   },
   "required": [
     "name",
-    "node_type"
+    "unit"
   ],
-  "title": "Node",
+  "title": "Normalization",
   "type": "object"
 }

@@ -2,7 +2,7 @@
   "$defs": {
     "DataSource": {
       "additionalProperties": true,
-      "description": "A data source, such as a publication or field measurement.\n\nVery preliminary.",
+      "description": "A data source, such as a publication or field measurement.\n\nA very rough draft; expect changes.",
       "properties": {
         "authors": {
           "items": {
@@ -43,57 +43,17 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
-  "description": "A generic process, possibly multi-functional. Does not have a reference product.\n\nOnly difference from `LCINode` is that some more fields are required.",
+  "description": "A generic process, possibly multi-functional. Does not have a reference product.\n\nOnly difference from `LCINode` is that some fields are required.",
   "properties": {
     "name": {
       "title": "Name",
       "type": "string"
     },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
-    },
-    "created": {
-      "anyOf": [
-        {
-          "format": "date-time",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Created"
-    },
-    "modified": {
-      "anyOf": [
-        {
-          "format": "date-time",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Modified"
-    },
-    "location": {
-      "title": "Location",
-      "type": "string"
-    },
     "node_type": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Node Type"
+      "const": "process",
+      "default": "process",
+      "title": "Node Type",
+      "type": "string"
     },
     "comment": {
       "anyOf": [
@@ -113,21 +73,6 @@
       "default": null,
       "title": "Comment"
     },
-    "references": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/DataSource"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "References"
-    },
     "tags": {
       "anyOf": [
         {
@@ -143,26 +88,44 @@
       "default": null,
       "title": "Tags"
     },
-    "properties": {
-      "type": "object",
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "type": "number"
+    "location": {
+      "title": "Location",
+      "type": "string"
+    },
+    "references": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/DataSource"
           },
-          {
-            "type": "integer"
-          }
-        ]
-      },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "References"
+    },
+    "properties": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
       "title": "Properties"
     }
   },
   "required": [
     "name",
-    "unit",
-    "location",
-    "properties"
+    "location"
   ],
   "title": "Process",
   "type": "object"
