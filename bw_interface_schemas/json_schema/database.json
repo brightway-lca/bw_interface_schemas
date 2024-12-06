@@ -43,14 +43,15 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "A set of life cycle inventory nodes and edges which have a common label and\nlicense.",
   "properties": {
     "name": {
       "title": "Name",
       "type": "string"
     },
     "node_type": {
-      "const": "product",
-      "default": "product",
+      "const": "database",
+      "default": "database",
       "title": "Node Type",
       "type": "string"
     },
@@ -87,17 +88,9 @@
       "default": null,
       "title": "Tags"
     },
-    "location": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Location"
+    "license": {
+      "title": "License",
+      "type": "string"
     },
     "references": {
       "anyOf": [
@@ -113,31 +106,12 @@
       ],
       "default": null,
       "title": "References"
-    },
-    "properties": {
-      "anyOf": [
-        {
-          "additionalProperties": {
-            "$ref": "#/$defs/JsonValue"
-          },
-          "type": "object"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Properties"
-    },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
     }
   },
   "required": [
     "name",
-    "unit"
+    "license"
   ],
-  "title": "Product",
+  "title": "Database",
   "type": "object"
 }
