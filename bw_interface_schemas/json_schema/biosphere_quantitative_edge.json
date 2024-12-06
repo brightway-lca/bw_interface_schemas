@@ -45,6 +45,8 @@
   "additionalProperties": true,
   "properties": {
     "edge_type": {
+      "const": "biosphere",
+      "default": "biosphere",
       "title": "Edge Type",
       "type": "string"
     },
@@ -132,13 +134,101 @@
       ],
       "default": null,
       "title": "Properties"
+    },
+    "amount": {
+      "title": "Amount",
+      "type": "number"
+    },
+    "uncertainty_type": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Uncertainty Type"
+    },
+    "loc": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Loc"
+    },
+    "scale": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Scale"
+    },
+    "shape": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Shape"
+    },
+    "minimum": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Minimum"
+    },
+    "maximum": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Maximum"
+    },
+    "negative": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Negative"
     }
   },
   "required": [
-    "edge_type",
     "source",
-    "target"
+    "target",
+    "amount"
   ],
-  "title": "Edge",
+  "title": "BiosphereQuantitativeEdge",
   "type": "object"
 }

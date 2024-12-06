@@ -1,26 +1,60 @@
-"""bw_interface_schemas."""
-
 __all__ = (
     "__version__",
-    "ProcessWithReferenceProduct",
-    "ElementaryFlow",
-    "Node",
+    "BiosphereQuantitativeEdge",
+    "CharacterizationQuantitativeEdge",
+    "Collection",
+    "ProductSystem",
+    "DataSource",
     "Edge",
+    "ElementaryFlow",
+    "Graph",
+    "ImpactAssessmentMethod",
+    "ImpactCategory",
+    "InventoryNode",
+    "load_graph",
+    "Node",
+    "NodeTypes",
+    "Normalization",
+    "NormalizationQuantitativeEdge",
     "Process",
     "Product",
-    "DataSource",
+    "Project",
+    "QualitativeEdge",
+    "QualitativeEdgeTypes",
+    "QuantitativeEdge",
+    "QuantitativeEdgeTypes",
+    "TechnosphereQuantitativeEdge",
+    "Weighting",
+    "WeightingQuantitativeEdge",
 )
 
-__version__ = "0.1.1"
+__version__ = "0.2"
 
 
-from .lci import (
+from bw_interface_schemas.graph import Graph, load_graph
+from bw_interface_schemas.models import (
+    BiosphereQuantitativeEdge,
+    CharacterizationQuantitativeEdge,
+    Collection,
     DataSource,
     Edge,
     ElementaryFlow,
+    ImpactAssessmentMethod,
+    ImpactCategory,
+    InventoryNode,
     Node,
+    NodeTypes,
+    Normalization,
+    NormalizationQuantitativeEdge,
     Process,
-    ProcessWithReferenceProduct,
     Product,
+    ProductSystem,
+    Project,
+    QualitativeEdge,
+    QualitativeEdgeTypes,
+    QuantitativeEdge,
+    QuantitativeEdgeTypes,
+    TechnosphereQuantitativeEdge,
+    Weighting,
+    WeightingQuantitativeEdge,
 )
-

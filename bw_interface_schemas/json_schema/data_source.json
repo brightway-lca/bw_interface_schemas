@@ -1,0 +1,40 @@
+{
+  "additionalProperties": true,
+  "description": "A data source, such as a publication or field measurement.\n\nA very rough draft; expect changes.",
+  "properties": {
+    "authors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Authors",
+      "type": "array"
+    },
+    "year": {
+      "title": "Year",
+      "type": "integer"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "doi": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Doi"
+    }
+  },
+  "required": [
+    "authors",
+    "year",
+    "title"
+  ],
+  "title": "DataSource",
+  "type": "object"
+}

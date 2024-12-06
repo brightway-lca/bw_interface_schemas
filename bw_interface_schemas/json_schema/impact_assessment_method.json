@@ -2,7 +2,7 @@
   "$defs": {
     "DataSource": {
       "additionalProperties": true,
-      "description": "A data source, such as a publication or field measurement.\n\nVery preliminary.",
+      "description": "A data source, such as a publication or field measurement.\n\nA very rough draft; expect changes.",
       "properties": {
         "authors": {
           "items": {
@@ -43,64 +43,17 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "A set of impact categories, weightings, and normalizations, with their\nassociated factors.",
   "properties": {
     "name": {
       "title": "Name",
       "type": "string"
     },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
-    },
-    "created": {
-      "anyOf": [
-        {
-          "format": "date-time",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Created"
-    },
-    "modified": {
-      "anyOf": [
-        {
-          "format": "date-time",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Modified"
-    },
-    "location": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Location"
-    },
     "node_type": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Node Type"
+      "const": "impact_assessment_method",
+      "default": "impact_assessment_method",
+      "title": "Node Type",
+      "type": "string"
     },
     "comment": {
       "anyOf": [
@@ -120,21 +73,6 @@
       "default": null,
       "title": "Comment"
     },
-    "references": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/DataSource"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "References"
-    },
     "tags": {
       "anyOf": [
         {
@@ -150,26 +88,30 @@
       "default": null,
       "title": "Tags"
     },
-    "properties": {
-      "type": "object",
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "type": "number"
+    "license": {
+      "title": "License",
+      "type": "string"
+    },
+    "references": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/DataSource"
           },
-          {
-            "type": "integer"
-          }
-        ]
-      },
-      "title": "Properties"
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "References"
     }
   },
   "required": [
     "name",
-    "unit",
-    "properties"
+    "license"
   ],
-  "title": "LCINode",
+  "title": "ImpactAssessmentMethod",
   "type": "object"
 }

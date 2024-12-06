@@ -40,19 +40,42 @@
       "title": "DataSource",
       "type": "object"
     },
-    "JsonValue": {}
+    "JsonValue": {},
+    "QualitativeEdgeTypes": {
+      "enum": [
+        "belongs_to"
+      ],
+      "title": "QualitativeEdgeTypes",
+      "type": "string"
+    }
   },
   "additionalProperties": true,
+  "description": "A qualitative edge linking two nodes in the graph.\n\nThe type of relationship is defined by the `edge_type`. Normally these are\ndrawn from `QualitativeEdgeTypes` but don't have to be.",
   "properties": {
-    "name": {
-      "title": "Name",
-      "type": "string"
+    "edge_type": {
+      "$ref": "#/$defs/QualitativeEdgeTypes"
     },
-    "node_type": {
-      "const": "product",
-      "default": "product",
-      "title": "Node Type",
-      "type": "string"
+    "source": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Source"
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Target"
     },
     "comment": {
       "anyOf": [
@@ -72,33 +95,6 @@
       "default": null,
       "title": "Comment"
     },
-    "tags": {
-      "anyOf": [
-        {
-          "additionalProperties": {
-            "$ref": "#/$defs/JsonValue"
-          },
-          "type": "object"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Tags"
-    },
-    "location": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Location"
-    },
     "references": {
       "anyOf": [
         {
@@ -114,6 +110,21 @@
       "default": null,
       "title": "References"
     },
+    "tags": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tags"
+    },
     "properties": {
       "anyOf": [
         {
@@ -128,16 +139,13 @@
       ],
       "default": null,
       "title": "Properties"
-    },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
     }
   },
   "required": [
-    "name",
-    "unit"
+    "edge_type",
+    "source",
+    "target"
   ],
-  "title": "Product",
+  "title": "QualitativeEdge",
   "type": "object"
 }

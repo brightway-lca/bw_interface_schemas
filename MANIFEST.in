@@ -1,0 +1,1 @@
+include bw_interface_schemas/json_schema/*.json

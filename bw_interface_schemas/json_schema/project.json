@@ -1,38 +1,19 @@
 {
   "$defs": {
-    "JsonValue": {},
-    "NodeTypes": {
-      "enum": [
-        "project",
-        "product_system",
-        "process",
-        "product",
-        "elementary_flow",
-        "impact_assessment_method",
-        "impact_category",
-        "normalization",
-        "weighting"
-      ],
-      "title": "NodeTypes",
-      "type": "string"
-    }
+    "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "A set of `ProductSystem` and `ImpactAssessmentMethod` collections which\nencapsulate a sustainability assessment project. Projects can be\nself-contained, or can link to other `Project` collections.",
   "properties": {
     "name": {
       "title": "Name",
       "type": "string"
     },
     "node_type": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/NodeTypes"
-        },
-        {
-          "type": "string"
-        }
-      ],
-      "title": "Node Type"
+      "const": "project",
+      "default": "project",
+      "title": "Node Type",
+      "type": "string"
     },
     "comment": {
       "anyOf": [
@@ -69,9 +50,8 @@
     }
   },
   "required": [
-    "name",
-    "node_type"
+    "name"
   ],
-  "title": "Node",
+  "title": "Project",
   "type": "object"
 }

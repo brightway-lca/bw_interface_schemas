@@ -40,7 +40,22 @@
       "title": "DataSource",
       "type": "object"
     },
-    "JsonValue": {}
+    "JsonValue": {},
+    "NodeTypes": {
+      "enum": [
+        "project",
+        "product_system",
+        "process",
+        "product",
+        "elementary_flow",
+        "impact_assessment_method",
+        "impact_category",
+        "normalization",
+        "weighting"
+      ],
+      "title": "NodeTypes",
+      "type": "string"
+    }
   },
   "additionalProperties": true,
   "properties": {
@@ -49,10 +64,15 @@
       "type": "string"
     },
     "node_type": {
-      "const": "product",
-      "default": "product",
-      "title": "Node Type",
-      "type": "string"
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NodeTypes"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Node Type"
     },
     "comment": {
       "anyOf": [
@@ -128,16 +148,12 @@
       ],
       "default": null,
       "title": "Properties"
-    },
-    "unit": {
-      "title": "Unit",
-      "type": "string"
     }
   },
   "required": [
     "name",
-    "unit"
+    "node_type"
   ],
-  "title": "Product",
+  "title": "InventoryNode",
   "type": "object"
 }

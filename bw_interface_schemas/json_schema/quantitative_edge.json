@@ -2,7 +2,7 @@
   "$defs": {
     "DataSource": {
       "additionalProperties": true,
-      "description": "A data source, such as a publication or field measurement.\n\nVery preliminary.",
+      "description": "A data source, such as a publication or field measurement.\n\nA very rough draft; expect changes.",
       "properties": {
         "authors": {
           "items": {
@@ -41,142 +41,117 @@
       "type": "object"
     },
     "JsonValue": {},
-    "LCINode": {
-      "additionalProperties": true,
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string"
-        },
-        "unit": {
-          "title": "Unit",
-          "type": "string"
-        },
-        "created": {
-          "anyOf": [
-            {
-              "format": "date-time",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Created"
-        },
-        "modified": {
-          "anyOf": [
-            {
-              "format": "date-time",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Modified"
-        },
-        "location": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Location"
-        },
-        "node_type": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Node Type"
-        },
-        "comment": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "additionalProperties": {
-                "type": "string"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Comment"
-        },
-        "references": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/$defs/DataSource"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "References"
-        },
-        "tags": {
-          "anyOf": [
-            {
-              "additionalProperties": {
-                "$ref": "#/$defs/JsonValue"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Tags"
-        },
-        "properties": {
-          "type": "object",
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "integer"
-              }
-            ]
-          },
-          "title": "Properties"
-        }
-      },
-      "required": [
-        "name",
-        "unit",
-        "properties"
+    "QuantitativeEdgeTypes": {
+      "enum": [
+        "technosphere",
+        "biosphere",
+        "characterization",
+        "weighting",
+        "normalization"
       ],
-      "title": "LCINode",
-      "type": "object"
+      "title": "QuantitativeEdgeTypes",
+      "type": "string"
     }
   },
   "additionalProperties": true,
   "description": "An quantitative edge linking two nodes in the graph.",
   "properties": {
+    "edge_type": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/QuantitativeEdgeTypes"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Edge Type"
+    },
+    "source": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Source"
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Target"
+    },
+    "comment": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Comment"
+    },
+    "references": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/DataSource"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "References"
+    },
+    "tags": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tags"
+    },
+    "properties": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Properties"
+    },
     "amount": {
       "title": "Amount",
       "type": "number"
@@ -264,53 +239,13 @@
       ],
       "default": null,
       "title": "Negative"
-    },
-    "edge_type": {
-      "title": "Edge Type",
-      "type": "string"
-    },
-    "source": {
-      "$ref": "#/$defs/LCINode"
-    },
-    "target": {
-      "$ref": "#/$defs/LCINode"
-    },
-    "properties": {
-      "type": "object",
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "type": "number"
-          },
-          {
-            "type": "integer"
-          }
-        ]
-      },
-      "title": "Properties"
-    },
-    "tags": {
-      "anyOf": [
-        {
-          "additionalProperties": {
-            "$ref": "#/$defs/JsonValue"
-          },
-          "type": "object"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Tags"
     }
   },
   "required": [
-    "amount",
     "edge_type",
     "source",
     "target",
-    "properties"
+    "amount"
   ],
   "title": "QuantitativeEdge",
   "type": "object"
