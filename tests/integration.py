@@ -1,4 +1,4 @@
-from bw_interface_schemas import GraphLoader
+from bw_interface_schemas import load_graph
 
 
 def test_dump_graph(bike_as_graph):
@@ -6,4 +6,4 @@ def test_dump_graph(bike_as_graph):
 
 
 def test_construct_graph(bike_as_dict):
-    assert GraphLoader(identifier_field="name").load(bike_as_dict, use_identifiers=True)
+    assert load_graph(bike_as_dict)
