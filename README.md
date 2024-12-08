@@ -17,7 +17,27 @@ Here is our standard bicycle production example in the new paradigm:
 
 <img src="example.png">
 
-You can see two ways of building this graph in code in `tests/conftest.py`.
+You can see this graph in code in `tests/conftest.py`.
+
+## Design decisions
+
+* All data is stored as a graph. That means that the only we have to express data is nodes linked with edges. The graph can include processes and products (as nodes), but also organization units like databases and impact assessment methods.
+* Nodes and edges have types, and type labels are given in a set of `Enum` classes. These types correspond with pydantic classes which include custom data attributes and validation functions.
+* Edges have direction, and the direction is meaningful. For example, a process producing a product would have an edge from (`source`) the process to (`target`) a product. If the product was consumed as an input of the process, the product would be the `source` and the process would be the `target`. The same logic applies to processes and elementary flows.
+* Supply chains have a strict product - process - product pattern.
+* Processes are located in time and space. Products can be generic (their attributes apply regardless of where or when the product is produced or consumed, such as products meeting some standard), or can have spatiotemporal specificity (the sulfur content or energetic density of natural gas varies across time and space).
+* Technosphere (supply chain) edges must state whether or not they are functional. A functional edge is one where the modeller has indicated that the product being consumed or produced is one of the functions of the process. A process with multiple functional edges will need to have practitioners indicate a strategy to handle multifunctionality; this is usually done via allocation or substitution, though this data schema does not describe or indicate how to specify such strategies.
+* Nodes have identifiers. We stores nodes as a dictionary, where the identifiers are the keys. Edge `source` and `target` attributes referes to these identifiers. Identifiers can be strings or integers, and their label in the node datasets themselves is flexible.
+* Elementary flows and products can refer to the same underlying concepts, but are distinct nodes. For example, carbon dioxide has industrial uses and is also an important air resource and emission, but because it operates in different contexts in all three cases, it is modeled as different objects. Biosphere edges always link process nodes to elementary flow nodes, and elementary flow nodes cannot operate in the technosphere.
+* There is no rigid normalization pattern. Edges allow for some degree of normalization (edge source and targets act like foreign keys to nodes), but other attributes like units are not normalized. Our intent is to specify some of these non-normalized attributes in the [Sentier.dev](https://vocab.sentier.dev/en-US/) vocabulary, and to develop practical approaches to other tricky attributes like location.
+
+## Tags, properties, or dataset attributes?
+
+* Tags are for choosing from an already known set of possibilities where more than one node could share the same value.
+* Properties are for numeric values which describe the object's attributes or performance.
+* Dataset attributes (i.e. `node['foo']`) are for everything else.
+
+As always, [hard cases make bad law](https://en.wikipedia.org/wiki/Hard_cases_make_bad_law), and some things could fit into multiple possible buckets. We will expand and clarify this distinction with more experience.
 
 ## Comparison with Brightway2
 
