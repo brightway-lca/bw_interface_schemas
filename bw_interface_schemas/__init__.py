@@ -7,9 +7,11 @@ __all__ = (
     "DataSource",
     "Edge",
     "ElementaryFlow",
+    "Graph",
     "ImpactAssessmentMethod",
     "ImpactCategory",
     "InventoryNode",
+    "load_graph",
     "Node",
     "NodeTypes",
     "Normalization",
@@ -24,14 +26,12 @@ __all__ = (
     "TechnosphereQuantitativeEdge",
     "Weighting",
     "WeightingQuantitativeEdge",
-    "Graph",
-    "GraphLoader",
 )
 
 __version__ = "0.2"
 
 
-from bw_interface_schemas.graph import Graph, GraphLoader
+from bw_interface_schemas.graph import Graph, load_graph
 from bw_interface_schemas.models import (
     BiosphereQuantitativeEdge,
     CharacterizationQuantitativeEdge,
