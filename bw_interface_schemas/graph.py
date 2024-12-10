@@ -6,7 +6,6 @@ from pydantic import BaseModel, model_validator
 from bw_interface_schemas.models import (
     BiosphereQuantitativeEdge,
     CharacterizationQuantitativeEdge,
-    Database,
     Edge,
     ElementaryFlow,
     Identifier,
@@ -18,6 +17,7 @@ from bw_interface_schemas.models import (
     NormalizationQuantitativeEdge,
     Process,
     Product,
+    ProductSystem,
     Project,
     QualitativeEdge,
     QualitativeEdgeTypes,
@@ -29,7 +29,7 @@ from bw_interface_schemas.models import (
 
 NODE_MAPPING = {
     "project": Project,
-    "database": Database,
+    "product_system": ProductSystem,
     "process": Process,
     "product": Product,
     "elementary_flow": ElementaryFlow,
@@ -56,6 +56,13 @@ def getter(obj: Any, attr: str) -> Any:
 
 
 class Graph(BaseModel):
+    """
+    A `Graph` is the complete set of data used for sustainability assessment.
+    This can include inventory and impact assessment data, and any other nodes
+    and edges deemed useful by the practitioner to describe or model product
+    systems and their effects.
+    """
+
     nodes: dict[Identifier, Node]
     edges: list[Edge]
 
@@ -68,40 +75,40 @@ class Graph(BaseModel):
                 raise ValueError(f"Can't find edge target in nodes: {edge.target}")
         return self
 
-    def _objects_linked_to_database(self, label: str) -> None:
+    def _objects_linked_to_product_system(self, label: str) -> None:
         objects = (
             identifier
             for identifier, node in self.nodes.items()
             if node.node_type == getattr(NodeTypes, label)
         )
-        databases = {
+        product_systems = {
             identifier
             for identifier, node in self.nodes.items()
-            if node.node_type == NodeTypes.database
+            if node.node_type == NodeTypes.product_system
         }
 
         for obj in objects:
             if not any(
                 edge.source == obj
-                and edge.target in databases
+                and edge.target in product_systems
                 and edge.edge_type == QualitativeEdgeTypes.belongs_to
                 for edge in self.edges
             ):
-                raise ValueError(f"{label} node not linked to a database: {obj}")
+                raise ValueError(f"{label} node not linked to a product system: {obj}")
 
     @model_validator(mode="after")
-    def processes_in_database(self) -> Self:
-        self._objects_linked_to_database(label=NodeTypes.process)
+    def processes_in_product_system(self) -> Self:
+        self._objects_linked_to_product_system(label=NodeTypes.process)
         return self
 
     @model_validator(mode="after")
-    def products_in_database(self) -> Self:
-        self._objects_linked_to_database(label=NodeTypes.product)
+    def products_in_product_system(self) -> Self:
+        self._objects_linked_to_product_system(label=NodeTypes.product)
         return self
 
     @model_validator(mode="after")
-    def elementary_flows_in_database(self) -> Self:
-        self._objects_linked_to_database(label=NodeTypes.elementary_flow)
+    def elementary_flows_in_product_system(self) -> Self:
+        self._objects_linked_to_product_system(label=NodeTypes.elementary_flow)
         return self
 
     @model_validator(mode="after")

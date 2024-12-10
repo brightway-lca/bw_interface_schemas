@@ -3,7 +3,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
-  "description": "A set of `Database` and `ImpactAssessmentMethod` collections which\nencapsulate a sustainability assessment project. Projects can be\nself-contained, or can link to other `Project` collections.",
+  "description": "A set of `ProductSystem` and `ImpactAssessmentMethod` collections which\nencapsulate a sustainability assessment project. Projects can be\nself-contained, or can link to other `Project` collections.",
   "properties": {
     "name": {
       "title": "Name",

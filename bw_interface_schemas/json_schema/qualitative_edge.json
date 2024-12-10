@@ -41,80 +41,6 @@
       "type": "object"
     },
     "JsonValue": {},
-    "Node": {
-      "additionalProperties": true,
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string"
-        },
-        "node_type": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/NodeTypes"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "title": "Node Type"
-        },
-        "comment": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "additionalProperties": {
-                "type": "string"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Comment"
-        },
-        "tags": {
-          "anyOf": [
-            {
-              "additionalProperties": {
-                "$ref": "#/$defs/JsonValue"
-              },
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Tags"
-        }
-      },
-      "required": [
-        "name",
-        "node_type"
-      ],
-      "title": "Node",
-      "type": "object"
-    },
-    "NodeTypes": {
-      "enum": [
-        "project",
-        "database",
-        "process",
-        "product",
-        "elementary_flow",
-        "impact_assessment_method",
-        "impact_category",
-        "normalization",
-        "weighting"
-      ],
-      "title": "NodeTypes",
-      "type": "string"
-    },
     "QualitativeEdgeTypes": {
       "enum": [
         "belongs_to"
@@ -130,10 +56,26 @@
       "$ref": "#/$defs/QualitativeEdgeTypes"
     },
     "source": {
-      "$ref": "#/$defs/Node"
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Source"
     },
     "target": {
-      "$ref": "#/$defs/Node"
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Target"
     },
     "comment": {
       "anyOf": [

@@ -44,7 +44,7 @@
     "NodeTypes": {
       "enum": [
         "project",
-        "database",
+        "product_system",
         "process",
         "product",
         "elementary_flow",

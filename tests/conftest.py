@@ -8,7 +8,7 @@ def bike_as_dict() -> dict:
     return {
         "nodes": {
             "bike_db": {
-                "node_type": "database",
+                "node_type": "product_system",
                 "name": "bike_db",
                 "license": "CC-BY",
             },
