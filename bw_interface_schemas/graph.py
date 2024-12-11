@@ -6,6 +6,7 @@ from pydantic import BaseModel, model_validator
 from bw_interface_schemas.models import (
     BiosphereQuantitativeEdge,
     CharacterizationQuantitativeEdge,
+    Database,
     Edge,
     ElementaryFlow,
     Identifier,
