@@ -9,6 +9,7 @@ from bw_interface_schemas.models import (
     Database,
     Edge,
     ElementaryFlow,
+    Identifier,
     ImpactAssessmentMethod,
     ImpactCategory,
     Node,
@@ -47,34 +48,44 @@ EDGE_MAPPING = {
 }
 
 
+def getter(obj: Any, attr: str) -> Any:
+    """Retrieve `obj.attr` or `obj[attr]`"""
+    if hasattr(obj, attr):
+        return getattr(obj, attr)
+    return obj.get(attr)
+
+
 class Graph(BaseModel):
-    nodes: list[Node]
+    nodes: dict[Identifier, Node]
     edges: list[Edge]
 
     @model_validator(mode="after")
     def edges_reference_nodes(self) -> Self:
         for edge in self.edges:
-            if not any(edge.source == node for node in self.nodes):
+            if edge.source not in self.nodes:
                 raise ValueError(f"Can't find edge source in nodes: {edge.source}")
-            if not any(edge.target == node for node in self.nodes):
+            if edge.target not in self.nodes:
                 raise ValueError(f"Can't find edge target in nodes: {edge.target}")
         return self
 
     def _objects_linked_to_database(self, label: str) -> None:
         objects = (
-            node for node in self.nodes if node.node_type == getattr(NodeTypes, label)
+            identifier
+            for identifier, node in self.nodes.items()
+            if node.node_type == getattr(NodeTypes, label)
         )
-        databases = [
-            node for node in self.nodes if node.node_type == NodeTypes.database
-        ]
+        databases = {
+            identifier
+            for identifier, node in self.nodes.items()
+            if node.node_type == NodeTypes.database
+        }
 
         for obj in objects:
             if not any(
                 edge.source == obj
-                and edge.target == d
+                and edge.target in databases
                 and edge.edge_type == QualitativeEdgeTypes.belongs_to
                 for edge in self.edges
-                for d in databases
             ):
                 raise ValueError(f"{label} node not linked to a database: {obj}")
 
@@ -95,7 +106,11 @@ class Graph(BaseModel):
 
     @model_validator(mode="after")
     def process_has_at_least_one_functional_edge(self) -> Self:
-        processes = (node for node in self.nodes if node.node_type == NodeTypes.process)
+        processes = {
+            identifier
+            for identifier, node in self.nodes.items()
+            if node.node_type == NodeTypes.process
+        }
 
         for process in processes:
             if not any(
@@ -111,68 +126,137 @@ class Graph(BaseModel):
 
     # TBD: LCIA associations
 
+    @model_validator(mode="after")
+    def biosphere_edge_source_target_types(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.biosphere,
+            self.edges,
+        ):
+            if not (
+                getter(self.nodes[edge.source], "node_type") == NodeTypes.process
+                and getter(self.nodes[edge.target], "node_type")
+                == NodeTypes.elementary_flow
+            ) or (
+                getter(self.nodes[edge.target], "node_type") == NodeTypes.process
+                and getter(self.nodes[edge.source], "node_type")
+                == NodeTypes.elementary_flow
+            ):
+                raise ValueError(
+                    f"Biosphere edges must link a process to an elementary flow ({edge})"
+                )
+        return self
 
-class GraphLoader:
-    def __init__(
-        self,
-        node_mapping: dict[str, Node] | None = None,
-        edge_mapping: dict[str, Edge] | None = None,
-        identifier_field: str | int = "identifier",
-    ):
-        self.node_mapping = node_mapping or NODE_MAPPING
-        self.edge_mapping = edge_mapping or EDGE_MAPPING
-        self.identifier_field = identifier_field
+    @model_validator(mode="after")
+    def weighting_edge_source_target_types(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.weighting,
+            self.edges,
+        ):
+            if not getter(
+                self.nodes[edge.source], "node_type"
+            ) == NodeTypes.weighting and getter(
+                self.nodes[edge.target], "node_type"
+            ) in (NodeTypes.normalization, NodeTypes.impact_category):
+                raise ValueError(
+                    f"Weighting edges must link a weighting set to an impact category or a normalization set ({edge})"
+                )
+        return self
 
-    def _hash_list(self, obj: Any) -> Any:
-        """Translate lists to tuples if needed"""
-        if isinstance(obj, list):
-            return tuple(obj)
-        return obj
+    @model_validator(mode="after")
+    def normalization_edge_source_target_types(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.normalization,
+            self.edges,
+        ):
+            if not (
+                getter(self.nodes[edge.source], "node_type")
+                == NodeTypes.elementary_flow
+                and getter(self.nodes[edge.target], "node_type")
+                == NodeTypes.normalization
+            ):
+                raise ValueError(
+                    "Normalization edges must link an elementary flow to a normalization set"
+                )
+        return self
 
-    def load(self, graph: dict[str, list], use_identifiers: bool = False) -> Graph:
-        """
-        Load `graph` as simple Python objects into Pydantic classes.
+    @model_validator(mode="after")
+    def characterization_edge_source_target_types(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.characterization,
+            self.edges,
+        ):
+            if not (
+                getter(self.nodes[edge.source], "node_type")
+                == NodeTypes.elementary_flow
+                and getter(self.nodes[edge.target], "node_type")
+                == NodeTypes.impact_category
+            ):
+                raise ValueError(
+                    "Characterization edges must link an elementary flow to an impact category"
+                )
+        return self
 
-        Intended for validation.
+    @model_validator(mode="after")
+    def technosphere_edge_must_specify_functionality(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.technosphere,
+            self.edges,
+        ):
+            if not isinstance(getter(edge, "functional"), bool):
+                raise ValueError(
+                    f"Technosphere edges must indicate functionality status ({edge})"
+                )
+        return self
 
-        Parameters
-        ----------
-        graph
-            Graph as dictionary: `{"nodes": [<node_dicts>], "edges": [<edge_dicts>]}`.
-        use_identifiers
-            Fill up edges specified by only identifiers by substituting the
-            complete `Node` objects.
+    @model_validator(mode="after")
+    def technosphere_edge_source_target_types(self) -> Self:
+        for edge in filter(
+            lambda x: getter(x, "edge_type") == QuantitativeEdgeTypes.technosphere,
+            self.edges,
+        ):
+            if not (
+                (
+                    getter(self.nodes[edge.source], "node_type") == NodeTypes.process
+                    and getter(self.nodes[edge.target], "node_type")
+                    == NodeTypes.product
+                )
+                or (
+                    getter(self.nodes[edge.target], "node_type") == NodeTypes.process
+                    and getter(self.nodes[edge.source], "node_type")
+                    == NodeTypes.product
+                )
+            ):
+                raise ValueError(
+                    f"Technosphere edges must link a process and a product ({edge})"
+                )
+        return self
 
-        """
-        # We need to transform objects to pydantic classes so copy to avoid
-        # changing the input data
-        graph = deepcopy(graph)
-        if use_identifiers:
-            mapping = {
-                self._hash_list(obj[self.identifier_field]): obj
-                for obj in graph["nodes"]
-            }
-            for edge in graph["edges"]:
-                edge["source"] = mapping[self._hash_list(edge["source"])]
-                edge["target"] = mapping[self._hash_list(edge["target"])]
 
-        # Convert edge source and target objects from `dicts` to pydantic
-        # `Node` instances
-        for edge in graph["edges"]:
-            edge["source"] = self.node_mapping.get(edge["source"]["node_type"], Node)(
-                **edge["source"]
-            )
-            edge["target"] = self.node_mapping.get(edge["target"]["node_type"], Node)(
-                **edge["target"]
-            )
+def load_graph(
+    graph: dict[str, list | dict],
+    node_mapping: dict[str, Node] = NODE_MAPPING,
+    edge_mapping: dict[str, Edge] = EDGE_MAPPING,
+) -> Graph:
+    """
+    Load `graph` as simple Python objects into Pydantic classes.
 
-        return Graph(
-            nodes=[
-                self.node_mapping.get(obj["node_type"], Node)(**obj)
-                for obj in graph["nodes"]
-            ],
-            edges=[
-                self.edge_mapping.get(obj["edge_type"], Edge)(**obj)
-                for obj in graph["edges"]
-            ],
-        )
+    Intended for validation.
+
+    Parameters
+    ----------
+    graph
+        Graph as dictionary: `{"nodes": {<identifier>: <node_dict>}, "edges": [<edge_dicts>]}`.
+
+    """
+    node_mapping = node_mapping or NODE_MAPPING
+    edge_mapping = edge_mapping or EDGE_MAPPING
+
+    return Graph(
+        nodes={
+            key: node_mapping.get(obj["node_type"], Node)(**obj)
+            for key, obj in graph["nodes"].items()
+        },
+        edges=[
+            edge_mapping.get(obj["edge_type"], Edge)(**obj) for obj in graph["edges"]
+        ],
+    )

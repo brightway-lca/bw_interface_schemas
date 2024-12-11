@@ -2,16 +2,11 @@ import json
 import re
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Literal, Self, Union
+from typing import Annotated, Any, Literal, Self, Union
 
-from pydantic import BaseModel, ConfigDict, JsonValue, model_validator
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
 
-
-def getter(obj: Any, attr: str) -> Any:
-    """Retrieve `obj.attr` or `obj[attr]`"""
-    if hasattr(obj, attr):
-        return getattr(obj, attr)
-    return obj.get(attr)
+Identifier = Annotated[int | str, Field()]
 
 
 class Parsimonius(BaseModel):
@@ -174,8 +169,8 @@ class QuantitativeEdgeTypes(StrEnum):
 
 class Edge(Parsimonius):
     edge_type: str
-    source: Node
-    target: Node
+    source: Identifier
+    target: Identifier
     comment: Union[str, dict[str, str], None] = None
     references: list[DataSource] | None = None
     tags: dict[str, JsonValue] | None = None
@@ -215,33 +210,11 @@ class CharacterizationQuantitativeEdge(QuantitativeEdge):
     )
     location: str | None = None
 
-    @model_validator(mode="after")
-    def source_target_types(self) -> Self:
-        if not (
-            getter(self.source, "node_type") == NodeTypes.elementary_flow
-            and getter(self.target, "node_type") == NodeTypes.impact_category
-        ):
-            raise ValueError(
-                "Characterization edges must link an elementary flow to an impact category"
-            )
-        return self
-
 
 class NormalizationQuantitativeEdge(QuantitativeEdge):
     """"""
 
     edge_type: Literal[QuantitativeEdgeTypes.normalization]
-
-    @model_validator(mode="after")
-    def source_target_types(self) -> Self:
-        if not (
-            getter(self.source, "node_type") == NodeTypes.elementary_flow
-            and getter(self.target, "node_type") == NodeTypes.normalization
-        ):
-            raise ValueError(
-                "Normalization edges must link an elementary flow to a normalization set"
-            )
-        return self
 
 
 class WeightingQuantitativeEdge(QuantitativeEdge):
@@ -251,35 +224,11 @@ class WeightingQuantitativeEdge(QuantitativeEdge):
         QuantitativeEdgeTypes.weighting
     )
 
-    @model_validator(mode="after")
-    def source_target_types(self) -> Self:
-        if not getter(self.source, "node_type") == NodeTypes.weighting and self.target[
-            "node_type"
-        ] in (NodeTypes.normalization, NodeTypes.impact_category):
-            raise ValueError(
-                "Weighting edges must link a weighting set to an impact category or normalization set"
-            )
-        return self
-
 
 class BiosphereQuantitativeEdge(QuantitativeEdge):
     edge_type: Literal[QuantitativeEdgeTypes.biosphere] = (
         QuantitativeEdgeTypes.biosphere
     )
-
-    @model_validator(mode="after")
-    def source_target_types(self) -> Self:
-        if not (
-            getter(self.source, "node_type") == NodeTypes.process
-            and getter(self.target, "node_type") == NodeTypes.elementary_flow
-        ) or (
-            getter(self.target, "node_type") == NodeTypes.process
-            and getter(self.source, "node_type") == NodeTypes.elementary_flow
-        ):
-            raise ValueError(
-                "Biosphere edges must link a process to an elementary flow"
-            )
-        return self
 
     @model_validator(mode="before")
     @classmethod
@@ -295,21 +244,6 @@ class TechnosphereQuantitativeEdge(QuantitativeEdge):
     edge_type: Literal[QuantitativeEdgeTypes.technosphere] = (
         QuantitativeEdgeTypes.technosphere
     )
-
-    @model_validator(mode="after")
-    def technosphere_edge_must_specify_functionality(self) -> Self:
-        if not (
-            (
-                getter(self.source, "node_type") == NodeTypes.process
-                and getter(self.target, "node_type") == NodeTypes.product
-            )
-            or (
-                getter(self.target, "node_type") == NodeTypes.process
-                and getter(self.source, "node_type") == NodeTypes.product
-            )
-        ):
-            raise ValueError("Technosphere edges must link a process and a product")
-        return self
 
 
 if __name__ == "__main__":

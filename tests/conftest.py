@@ -6,70 +6,70 @@ import bw_interface_schemas as schema
 @pytest.fixture
 def bike_as_dict() -> dict:
     return {
-        "nodes": [
-            {
+        "nodes": {
+            "bike_db": {
                 "node_type": "database",
                 "name": "bike_db",
                 "license": "CC-BY",
             },
-            {
+            "natural gas extraction": {
                 "node_type": "process",
                 "name": "natural gas extraction",
                 "location": "NO",
             },
-            {
+            "natural gas": {
                 "node_type": "product",
                 "name": "natural gas",
                 "unit": "MJ",
             },
-            {
+            "carbon fibre production": {
                 "node_type": "process",
                 "name": "carbon fibre production",
                 "location": "DE",
             },
-            {
+            "carbon fibre": {
                 "node_type": "product",
                 "name": "carbon fibre",
                 "unit": "kg",
             },
-            {
+            "bike manufacturing": {
                 "node_type": "process",
                 "name": "bike manufacturing",
                 "location": "DK",
             },
-            {
+            "bicycle": {
                 "node_type": "product",
                 "name": "bicycle",
                 "unit": "number",
             },
-            {
+            "CO2": {
                 "node_type": "elementary_flow",
                 "name": "CO2",
                 "context": ["air"],
                 "unit": "kg",
             },
-            {
+            "IPCC": {
                 "node_type": "impact_assessment_method",
                 "name": "IPCC",
                 "license": "CC-BY",
             },
-            {
+            "IPCC - 100 years": {
                 "node_type": "impact_category",
                 "name": ["IPCC", "100 years"],
                 "unit": "kg CO2-eq.",
             },
-        ],
+        },
         "edges": [
             {
                 "edge_type": "belongs_to",
-                "source": ["IPCC", "100 years"],
+                "source": "IPCC - 100 years",
                 "target": "IPCC",
             },
             {
                 "edge_type": "characterization",
                 "amount": 1.0,
                 "source": "CO2",
-                "target": ["IPCC", "100 years"],
+                "target": "IPCC - 100 years",
             },
             {
                 "edge_type": "biosphere",
@@ -131,82 +131,5 @@ def bike_as_dict() -> dict:
 
 
 @pytest.fixture
-def bike_as_graph() -> schema.Graph:
-    db = schema.Database(name="bike", license="CC-BY")
-    ng_extraction = schema.Process(name="natural gas extraction", location="NO")
-    ng = schema.Product(name="natural gas", unit="MJ")
-    cf_production = schema.Process(name="carbon fibre production", location="DE")
-    cf = schema.Product(name="carbon fibre", unit="kg")
-    bike_manufacture = schema.Process(name="bike manufacturing", location="DK")
-    bike = schema.Product(name="bike", unit="bicycle")
-    co2 = schema.ElementaryFlow(name="CO2", unit="kg", context=["air"])
-    ipcc = schema.ImpactAssessmentMethod(name="IPCC", license="CC-BY")
-    gwp = schema.ImpactCategory(name=["IPCC", "100 years"], unit="CO2-eq.")
-
-    return schema.Graph(
-        nodes=[
-            db,
-            ipcc,
-            gwp,
-            ng_extraction,
-            ng,
-            cf_production,
-            cf,
-            bike_manufacture,
-            bike,
-            co2,
-        ],
-        edges=[
-            schema.QualitativeEdge(
-                source=gwp,
-                target=ipcc,
-                edge_type=schema.QualitativeEdgeTypes.belongs_to,
-            ),
-            schema.CharacterizationQuantitativeEdge(source=co2, target=gwp, amount=1),
-            schema.TechnosphereQuantitativeEdge(
-                source=ng,
-                target=cf_production,
-                amount=237,
-            ),
-            schema.TechnosphereQuantitativeEdge(
-                source=cf,
-                target=bike_manufacture,
-                amount=2.5,
-            ),
-            schema.BiosphereQuantitativeEdge(
-                source=cf_production, target=co2, amount=26.6
-            ),
-            schema.TechnosphereQuantitativeEdge(
-                source=ng_extraction,
-                target=ng,
-                amount=1,
-                functional=True,
-            ),
-            schema.TechnosphereQuantitativeEdge(
-                source=cf_production,
-                target=cf,
-                amount=1,
-                functional=True,
-            ),
-            schema.TechnosphereQuantitativeEdge(
-                source=bike_manufacture,
-                target=bike,
-                amount=1,
-                functional=True,
-            ),
-        ]
-        + [
-            schema.QualitativeEdge(
-                source=node, target=db, edge_type=schema.QualitativeEdgeTypes.belongs_to
-            )
-            for node in (
-                ng_extraction,
-                ng,
-                cf_production,
-                cf,
-                bike_manufacture,
-                bike,
-                co2,
-            )
-        ],
-    )
+def bike_as_graph(bike_as_dict) -> schema.Graph:
+    return schema.load_graph(bike_as_dict)
