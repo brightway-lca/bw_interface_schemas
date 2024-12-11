@@ -42,6 +42,7 @@ class NodeTypes(StrEnum):
 
     project = "project"
     product_system = "product_system"
+    product_system_variant = "product_system_variant"
     process = "process"
     product = "product"
     elementary_flow = "elementary_flow"
