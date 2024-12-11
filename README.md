@@ -51,7 +51,7 @@ As always, [hard cases make bad law](https://en.wikipedia.org/wiki/Hard_cases_ma
 
 ## Comparison with Brightway2
 
-These new interfaces break backwards compatibility. We do not take such steps lightly; these changes were necessary to include database, projects, and methods in the same data store as other nodes and edges, and to add sanity checks and simpler code paths to building correct supply chain models.
+These new interfaces break backwards compatibility. We do not take such steps lightly; these changes were necessary to include product systems, projects, and methods in the same data store as other nodes and edges, and to add sanity checks and simpler code paths to building correct supply chain models.
 
 Our approach has the following advantages:
 
@@ -60,7 +60,7 @@ Our approach has the following advantages:
 * Removal of edge `type` labels which were at best confusing and sometimes incorrect. Edges now have a small set of possible types which only indicates the matrix they can be used in, and explicit instead of implicit direction.
 * Clear separation of processes and products. Processes can only consume and produce products, and vice-versa. The previous allowance of chimaera processes which acted as products made modelling of multifunctional processes difficult and error-prone.
 * The single graph format with LCI and LCIA nodes can sensibly model impact assessment data. Previously impact assessment data had to pretend to be inventory databases in `bw2io`.
-* A unified data format which is identical in Python and JSON. This makes serialization, database storage, and exchange across systems and languages much easier.
+* A unified data format which is identical in Python and JSON. This makes serialization, data storage, and exchange across systems and languages much easier.
 * Pydantic validation provides usable feedback and prevents data errors entering the database.
 
 ## Installation

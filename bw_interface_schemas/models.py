@@ -34,8 +34,15 @@ class DataSource(Parsimonius):
 
 
 class NodeTypes(StrEnum):
+    """
+    The built-in node types. These are sufficient to describe standard life
+    cycle assessment, but you can use custom types for new `Node` classes if
+    needed.
+    """
+
     project = "project"
-    database = "database"
+    product_system = "product_system"
+    product_system_variant = "product_system_variant"
     process = "process"
     product = "product"
     elementary_flow = "elementary_flow"
@@ -46,6 +53,14 @@ class NodeTypes(StrEnum):
 
 
 class Node(Parsimonius):
+    """
+    Base class for nodes in the graph. Can include processes, products, and
+    elementary flows, but also LCIA objects, and organizational tools like
+    product systems and projects.
+
+    All nodes must have a name and a type.
+    """
+
     # Recommended labels for these attributes
     name: str
     node_type: NodeTypes | str
@@ -69,14 +84,14 @@ class Collection(Node):
     The edge type should clearly differentiate the intended edge direction. In
     this case, a `Product` node (source) `belongs_to` a `Collection`.
 
-    Collections can be nested. For example, a database collection can belong to
-    a project collection.
+    Collections can be nested. For example, a product system collection can
+    belong to a project collection.
     """
 
 
 class Project(Collection):
     """
-    A set of `Database` and `ImpactAssessmentMethod` collections which
+    A set of `ProductSystem` and `ImpactAssessmentMethod` collections which
     encapsulate a sustainability assessment project. Projects can be
     self-contained, or can link to other `Project` collections.
     """
@@ -84,14 +99,15 @@ class Project(Collection):
     node_type: Literal[NodeTypes.project] = NodeTypes.project
 
 
-class Database(Collection):
+class ProductSystem(Collection):
     """
-    A set of life cycle inventory nodes and edges which have a common label and
-    license.
+    A collection of unit processes with elementary and product flows,
+    performing one or more defined functions, and which models the life cycle
+    of a product. From ISO 14040.
     """
 
     license: str
-    node_type: Literal[NodeTypes.database] = NodeTypes.database
+    node_type: Literal[NodeTypes.product_system] = NodeTypes.product_system
     references: list[DataSource] | None = None
 
 
@@ -109,6 +125,11 @@ class ImpactAssessmentMethod(Collection):
 
 
 class InventoryNode(Node):
+    """
+    Common base class for inventory nodes. Please only use subclasses of this
+    node.
+    """
+
     location: str | None = None
     references: list[DataSource] | None = None
     # Properties are quantitative but can be in a nested structure like
@@ -117,9 +138,15 @@ class InventoryNode(Node):
 
 
 class Process(InventoryNode):
-    """A generic process, possibly multi-functional. Does not have a reference product.
+    """
+    The smallest element considered in the life cycle inventory analysis for
+    which input and output data are quantified. From ISO 14040.
 
-    Only difference from `LCINode` is that some fields are required."""
+    Can have one or more functional product edges. Multfunctional processes
+    still have the type `NodeTypes.process`.
+
+    Processes extend `InventoryNode` with a required `location` (string).
+    """
 
     node_type: Literal[NodeTypes.process] = NodeTypes.process
     location: str
@@ -127,29 +154,84 @@ class Process(InventoryNode):
 
 
 class Product(InventoryNode):
+    """
+    Any good or service. From ISO 14040.
+
+    Products extend `InventoryNode` with a required `unit` - this unit is the
+    default used for every edge consuming or producing this product.
+
+    The functional unit of sustainability assessment is always product(s).
+    """
+
     node_type: Literal[NodeTypes.product] = NodeTypes.product
     unit: str
 
 
 class ElementaryFlow(InventoryNode):
+    """
+    A material or energy entering the system being studied that has been drawn
+    from the environment without previous human transformation, or material or
+    energy leaving the system being studied that is released into the
+    environment without subsequent human transformation. From ISO 14040.
+
+    For sustainability assessment, an elementary flow is a concept (e.g. CO2)
+    situated in a context (e.g. emission to air). The same underlying concept
+    (e.g. CO2) can be both a product and an elementary flow, but because they
+    operate in different contexts they are separate objects.
+
+    Elementary flows extend `InventoryNode` with a required `unit` - this unit
+    is the default used for every edge consuming or producing this product.
+    They also require a `context`, which is a list of strings.
+    """
+
     node_type: Literal[NodeTypes.elementary_flow] = NodeTypes.elementary_flow
     unit: str
     context: list[str]
 
 
 class ImpactCategory(Node):
+    """
+    A class representing environmental issues of concern to which life cycle
+    inventory analysis results may be assigned. From ISO 14040.
+
+    In practical terms characterization is a list of factors (midpoint or
+    endpoint) associated with elementary flows. This class stores metadata
+    about normalization.this groups characterization factors  of the same
+    category.
+    """
+
     node_type: Literal[NodeTypes.impact_category] = NodeTypes.impact_category
     name: list[str]
     unit: str
 
 
 class Normalization(Node):
+    """
+    Normalization is the calculation of the magnitude of the category indicator
+    results relative to some reference information. The aim of the
+    normalization is to understand better the relative magnitude for each
+    indicator result of the product system under study. From ISO 14044.
+
+    In practical terms normalization is a list of factors associated with
+    elementary flows. This class stores metadata about normalization.
+    """
+
     node_type: Literal[NodeTypes.normalization] = NodeTypes.normalization
     name: list[str]
     unit: str
 
 
 class Weighting(Node):
+    """
+    Weighting is the process of converting indicator results of different
+    impact categories by using numerical factors based on value-choices. It may
+    include aggregation of the weighted indicator results. From ISO 14044.
+
+    In practical terms weighting is a single factor associated with a
+    normalization or characterization set. This class stores metadata about
+    weighting.
+    """
+
     node_type: Literal[NodeTypes.weighting] = NodeTypes.weighting
     name: list[str]
     unit: str
@@ -157,6 +239,7 @@ class Weighting(Node):
 
 class QualitativeEdgeTypes(StrEnum):
     belongs_to = "belongs_to"
+    variant_of = "variant_of"
 
 
 class QuantitativeEdgeTypes(StrEnum):
@@ -238,8 +321,6 @@ class BiosphereQuantitativeEdge(QuantitativeEdge):
 
 
 class TechnosphereQuantitativeEdge(QuantitativeEdge):
-    """"""
-
     functional: bool = False
     edge_type: Literal[QuantitativeEdgeTypes.technosphere] = (
         QuantitativeEdgeTypes.technosphere
@@ -252,7 +333,7 @@ if __name__ == "__main__":
     objects = [
         BiosphereQuantitativeEdge,
         CharacterizationQuantitativeEdge,
-        Database,
+        ProductSystem,
         DataSource,
         Edge,
         ElementaryFlow,
