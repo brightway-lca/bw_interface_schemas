@@ -239,6 +239,7 @@ class Weighting(Node):
 
 class QualitativeEdgeTypes(StrEnum):
     belongs_to = "belongs_to"
+    variant_of = "variant_of"
 
 
 class QuantitativeEdgeTypes(StrEnum):
