@@ -2,9 +2,11 @@
   "$defs": {
     "JsonValue": {},
     "NodeTypes": {
+      "description": "The built-in node types. These are sufficient to describe standard life\ncycle assessment, but you can use custom types for new `Node` classes if\nneeded.",
       "enum": [
         "project",
         "product_system",
+        "product_system_variant",
         "process",
         "product",
         "elementary_flow",
@@ -18,6 +20,7 @@
     }
   },
   "additionalProperties": true,
+  "description": "Base class for nodes in the graph. Can include processes, products, and\nelementary flows, but also LCIA objects, and organizational tools like\nproduct systems and projects.\n\nAll nodes must have a name and a type.",
   "properties": {
     "name": {
       "title": "Name",

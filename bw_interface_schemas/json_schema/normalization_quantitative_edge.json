@@ -46,6 +46,7 @@
   "properties": {
     "edge_type": {
       "const": "normalization",
+      "default": "normalization",
       "title": "Edge Type",
       "type": "string"
     },
@@ -224,7 +225,6 @@
     }
   },
   "required": [
-    "edge_type",
     "source",
     "target",
     "amount"

@@ -43,6 +43,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "Any good or service. From ISO 14040.\n\nProducts extend `InventoryNode` with a required `unit` - this unit is the\ndefault used for every edge consuming or producing this product.\n\nThe functional unit of sustainability assessment is always product(s).",
   "properties": {
     "name": {
       "title": "Name",

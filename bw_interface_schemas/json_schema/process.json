@@ -43,7 +43,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
-  "description": "A generic process, possibly multi-functional. Does not have a reference product.\n\nOnly difference from `LCINode` is that some fields are required.",
+  "description": "The smallest element considered in the life cycle inventory analysis for\nwhich input and output data are quantified. From ISO 14040.\n\nCan have one or more functional product edges. Multfunctional processes\nstill have the type `NodeTypes.process`.\n\nProcesses extend `InventoryNode` with a required `location` (string).",
   "properties": {
     "name": {
       "title": "Name",

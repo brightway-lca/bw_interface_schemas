@@ -3,6 +3,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "Weighting is the process of converting indicator results of different\nimpact categories by using numerical factors based on value-choices. It may\ninclude aggregation of the weighted indicator results. From ISO 14044.\n\nIn practical terms weighting is a single factor associated with a\nnormalization or characterization set. This class stores metadata about\nweighting.",
   "properties": {
     "name": {
       "items": {

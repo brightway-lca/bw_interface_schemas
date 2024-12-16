@@ -43,6 +43,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "A material or energy entering the system being studied that has been drawn\nfrom the environment without previous human transformation, or material or\nenergy leaving the system being studied that is released into the\nenvironment without subsequent human transformation. From ISO 14040.\n\nFor sustainability assessment, an elementary flow is a concept (e.g. CO2)\nsituated in a context (e.g. emission to air). The same underlying concept\n(e.g. CO2) can be both a product and an elementary flow, but because they\noperate in different contexts they are separate objects.\n\nElementary flows extend `InventoryNode` with a required `unit` - this unit\nis the default used for every edge consuming or producing this product.\nThey also require a `context`, which is a list of strings.",
   "properties": {
     "name": {
       "title": "Name",

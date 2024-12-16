@@ -42,9 +42,11 @@
     },
     "JsonValue": {},
     "NodeTypes": {
+      "description": "The built-in node types. These are sufficient to describe standard life\ncycle assessment, but you can use custom types for new `Node` classes if\nneeded.",
       "enum": [
         "project",
         "product_system",
+        "product_system_variant",
         "process",
         "product",
         "elementary_flow",
@@ -58,6 +60,7 @@
     }
   },
   "additionalProperties": true,
+  "description": "Common base class for inventory nodes. Please only use subclasses of this\nnode.",
   "properties": {
     "name": {
       "title": "Name",

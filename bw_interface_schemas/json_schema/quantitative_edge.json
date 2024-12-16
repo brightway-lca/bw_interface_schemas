@@ -57,15 +57,7 @@
   "description": "An quantitative edge linking two nodes in the graph.",
   "properties": {
     "edge_type": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/QuantitativeEdgeTypes"
-        },
-        {
-          "type": "string"
-        }
-      ],
-      "title": "Edge Type"
+      "$ref": "#/$defs/QuantitativeEdgeTypes"
     },
     "source": {
       "anyOf": [

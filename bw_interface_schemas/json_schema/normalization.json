@@ -3,6 +3,7 @@
     "JsonValue": {}
   },
   "additionalProperties": true,
+  "description": "Normalization is the calculation of the magnitude of the category indicator\nresults relative to some reference information. The aim of the\nnormalization is to understand better the relative magnitude for each\nindicator result of the product system under study. From ISO 14044.\n\nIn practical terms normalization is a list of factors associated with\nelementary flows. This class stores metadata about normalization.",
   "properties": {
     "name": {
       "items": {
