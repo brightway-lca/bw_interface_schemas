@@ -17,6 +17,7 @@ class Parsimonius(BaseModel):
     )
 
     def model_dump(self, exclude_unset=True, *args, **kwargs):
+        # Change default value of `exclude_unset` to `True`
         return super().model_dump(*args, exclude_unset=exclude_unset, **kwargs)
 
 
@@ -196,8 +197,7 @@ class ImpactCategory(Node):
 
     In practical terms characterization is a list of factors (midpoint or
     endpoint) associated with elementary flows. This class stores metadata
-    about normalization.this groups characterization factors  of the same
-    category.
+    about the category, such as lineage and units.
     """
 
     node_type: Literal[NodeTypes.impact_category] = NodeTypes.impact_category
@@ -274,7 +274,7 @@ class QualitativeEdge(Edge):
 class QuantitativeEdge(Edge):
     """An quantitative edge linking two nodes in the graph."""
 
-    edge_type: QuantitativeEdgeTypes | str
+    edge_type: QuantitativeEdgeTypes
     amount: float
     uncertainty_type: int | None = None
     loc: float | None = None
@@ -297,7 +297,9 @@ class CharacterizationQuantitativeEdge(QuantitativeEdge):
 class NormalizationQuantitativeEdge(QuantitativeEdge):
     """"""
 
-    edge_type: Literal[QuantitativeEdgeTypes.normalization]
+    edge_type: Literal[QuantitativeEdgeTypes.normalization] = (
+        QuantitativeEdgeTypes.normalization
+    )
 
 
 class WeightingQuantitativeEdge(QuantitativeEdge):

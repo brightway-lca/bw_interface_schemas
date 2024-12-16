@@ -32,13 +32,13 @@ Another poor design choice was storing some aspects of the graph outside of the 
 ## Design decisions
 
 * All data is in a graph. That means that the only way we have to express data is nodes linked with edges. A single graph can provide all the information in a project.
-* Add attribute data is stored as JSON-serializable values.
+* All attribute data is stored as JSON-serializable values.
 * Nodes have identifiers. We stores nodes as a dictionary, where the identifiers are the keys. Edge `source` and `target` attributes refer to these identifiers. Identifiers can be strings or integers, and their label in the node datasets themselves is flexible.
 * Nodes and edges have types, and type labels are given in a set of `Enum` classes. These types correspond with pydantic classes which include custom data attributes and validation functions.
 * Edges have direction, and their direction is meaningful. For example, a process producing a product would have an edge from (`source`) the process to (`target`) a product. If the product was consumed as an input of the process, the product would be the `source` and the process would be the `target`. The same logic applies to processes and elementary flows.
-* The technosphere part of the graph has a strict product -> process -> product pattern. Edges between processes and products must state whether or not they are functional. A functional edge is one where the modeller has indicated that the product being consumed or produced is one of the functions of the process.
+* The part of the graph which will be used to construct the technosphere matrix (i.e. the supply and consumption of goods in supply chains) has a strict product -> process -> product pattern. Edges between processes and products must state whether or not they are functional. A functional edge is one where the modeller has indicated that the product being consumed or produced is one of the functions of the process.
 * Processes are located in time and space. Products can be generic (their attributes apply regardless of where or when the product is produced or consumed, such as products meeting some standard), or can have spatio-temporal specificity (the sulfur content or energetic density of natural gas varies across time and space).
-* Elementary flows and products can refer to the same underlying concepts, but are distinct nodes. For example, carbon dioxide has industrial uses and is also an important air resource and emission, but because it operates in different contexts in all three cases, it is modeled as different objects. Biosphere edges always link process nodes to elementary flow nodes, and elementary flow nodes cannot operate in the technosphere.
+* Elementary flows and products can refer to the same underlying concepts, but are distinct nodes. For example, carbon dioxide has industrial uses and is also an important air resource and emission, but because it operates in different contexts in all three cases, each of these cases is modeled as a different class instance. Biosphere edges always link process nodes to elementary flow nodes, and elementary flows nodes can only appear in the biosphere and LCIA matrices - therefore elementary flow nodes cannot be present in the technosphere matrix.
 * There is no rigid normalization pattern. Edges allow for some degree of normalization (edge source and targets act like foreign keys to nodes), but other attributes like units are not normalized. Our intent is to specify some of these non-normalized attributes in the [Sentier.dev](https://vocab.sentier.dev/en-US/) vocabulary, and to develop practical approaches to other tricky attributes like location.
 
 ## Tags, properties, or dataset attributes?
@@ -51,7 +51,7 @@ As always, [hard cases make bad law](https://en.wikipedia.org/wiki/Hard_cases_ma
 
 ## Comparison with Brightway2
 
-These new interfaces break backwards compatibility. We do not take such steps lightly; these changes were necessary to include product systems, projects, and methods in the same data store as other nodes and edges, and to add sanity checks and simpler code paths to building correct supply chain models.
+These new interfaces **break backwards compatibility**. We do not take such steps lightly; these changes were necessary to include product systems, projects, and methods in the same data store as other nodes and edges, and to add sanity checks and simpler code paths to building correct supply chain models.
 
 Our approach has the following advantages:
 

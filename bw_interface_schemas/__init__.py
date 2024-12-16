@@ -3,21 +3,21 @@ __all__ = (
     "BiosphereQuantitativeEdge",
     "CharacterizationQuantitativeEdge",
     "Collection",
-    "ProductSystem",
     "DataSource",
     "Edge",
     "ElementaryFlow",
     "Graph",
+    "graph_to_pydantic",
     "ImpactAssessmentMethod",
     "ImpactCategory",
     "InventoryNode",
-    "load_graph",
     "Node",
     "NodeTypes",
     "Normalization",
     "NormalizationQuantitativeEdge",
     "Process",
     "Product",
+    "ProductSystem",
     "Project",
     "QualitativeEdge",
     "QualitativeEdgeTypes",
@@ -31,7 +31,7 @@ __all__ = (
 __version__ = "0.2"
 
 
-from bw_interface_schemas.graph import Graph, load_graph
+from bw_interface_schemas.graph import Graph, graph_to_pydantic
 from bw_interface_schemas.models import (
     BiosphereQuantitativeEdge,
     CharacterizationQuantitativeEdge,

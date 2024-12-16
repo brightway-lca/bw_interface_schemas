@@ -239,7 +239,7 @@ class Graph(BaseModel):
         return self
 
 
-def load_graph(
+def graph_to_pydantic(
     graph: dict[str, list | dict],
     node_mapping: dict[str, Node] = NODE_MAPPING,
     edge_mapping: dict[str, Edge] = EDGE_MAPPING,
