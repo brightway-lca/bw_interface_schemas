@@ -66,6 +66,14 @@ class Graph(BaseModel):
     nodes: dict[Identifier, Node]
     edges: list[Edge]
 
+    def model_dump(self, *args, serialize_as_any=True, **kwargs) -> dict:
+        # Current implementation is succinct - nodes are instance of `Node`, edges of `Edge`. But
+        # this doesn't work with Pydantic, which will use the `Node` serializer instead of the
+        # specific subclass serializer. So we have to stop Pydantic from being so pedantic.
+        # See https://github.com/pydantic/pydantic/discussions/3293
+        kwargs["serialize_as_any"] = serialize_as_any
+        return super().model_dump(*args, **kwargs)
+
     @model_validator(mode="after")
     def edges_reference_nodes(self) -> Self:
         for edge in self.edges:

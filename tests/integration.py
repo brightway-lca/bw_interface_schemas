@@ -1,6 +1,7 @@
 from copy import deepcopy
 
-from bw_interface_schemas import graph_to_pydantic
+import bw_interface_schemas as schema
+from bw_interface_schemas.graph import NODE_MAPPING, EDGE_MAPPING
 
 
 def test_dump_graph(bike_as_graph):
@@ -8,30 +9,17 @@ def test_dump_graph(bike_as_graph):
 
 
 def test_construct_graph(bike_as_dict):
-    assert graph_to_pydantic(bike_as_dict)
+    graph = schema.graph_to_pydantic(bike_as_dict)
+
+    for key, node in bike_as_dict["nodes"].items():
+        assert isinstance(graph.nodes[key], NODE_MAPPING[node["node_type"]])
+        assert graph.nodes[key].name == node["name"]
+
+    for kls, dct in zip(graph.edges, bike_as_dict["edges"]):
+        assert isinstance(kls, EDGE_MAPPING[dct["edge_type"]])
 
 
 def test_roundtrip(bike_as_dict):
-    def add_default_fields(data: dict) -> dict:
-        edge_fields = ("comment", "properties", "references", "tags")
-        node_fields = ("comment", "tags")
-
-        for node in data["nodes"].values():
-            for field in node_fields:
-                if field not in node:
-                    node[field] = None
-        for edge in data["edges"]:
-            for field in edge_fields:
-                if field not in edge:
-                    edge[field] = None
-        return data
-
-    from pprint import pprint
-
-    pprint(graph_to_pydantic(deepcopy(bike_as_dict)).edges[1])
-    pprint(graph_to_pydantic(deepcopy(bike_as_dict)).model_dump()["edges"][1])
-    pprint(add_default_fields(deepcopy(bike_as_dict))["edges"][1])
-
-    assert graph_to_pydantic(deepcopy(bike_as_dict)).model_dump() == add_default_fields(
-        deepcopy(bike_as_dict)
-    )
+    assert schema.graph_to_pydantic(deepcopy(bike_as_dict)).model_dump(
+        exclude_unset=True
+    ) == deepcopy(bike_as_dict)
