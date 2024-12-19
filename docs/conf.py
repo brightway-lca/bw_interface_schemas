@@ -32,6 +32,8 @@ extensions = [
     "sphinx_design",
     # copy button on code blocks
     "sphinx_copybutton",
+    # support for pydantic models
+    "sphinxcontrib.autodoc_pydantic",
 ]
 
 exclude_patterns = ["_build"]
