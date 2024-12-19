@@ -26,8 +26,6 @@ extensions = [
     "sphinx_rtd_theme",
     # Markdown support
     "myst_parser",
-    # API documentation support
-    "autoapi",
     # responsive web component support
     "sphinx_design",
     # copy button on code blocks
@@ -84,37 +82,4 @@ myst_enable_extensions = [
     "deflist",
     "dollarmath",
     "html_image",
-]
-
-## autoapi configuration ################################################
-## https://sphinx-autoapi.readthedocs.io/en/latest/reference/config.html#customisation-options
-
-autoapi_options = [
-    "members",
-    "undoc-members",
-    "private-members",
-    "show-inheritance",
-    "show-module-summary",
-]
-
-autoapi_python_class_content = "both"
-autoapi_member_order = "groupwise"
-autoapi_root = "content/api"
-autoapi_keep_files = False
-
-autoapi_dirs = [
-    "../bw_interface_schemas",
-]
-
-autoapi_ignore = [
-    "*/data/*",
-    "*tests/*",
-    "*tests.py",
-    "*validation.py",
-    "*version.py",
-    "*.rst",
-    "*.yml",
-    "*.md",
-    "*.json",
-    "*.data",
 ]
