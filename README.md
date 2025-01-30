@@ -7,7 +7,7 @@
 
 ## About
 
-`bw_interface_schemas` defines a set of [pydantic](https://docs.pydantic.dev/2.0/) classes which will be the fundamental data schema for Brightway Cloud, the next iteration of the Brightway LCA software ecosystem. These schemas provide clear and consistent graph-based interfaces between Brightway software libraries, and simplify and harmonize the way data was modeled and stored in Brightway.
+`bw_interface_schemas` defines a set of [pydantic](https://docs.pydantic.dev/2.0/) classes which will be the fundamental data schema for the next iteration of the Brightway LCA software ecosystem. These schemas provide clear and consistent graph-based interfaces between Brightway software libraries, and simplify and harmonize the way data was modeled and stored in Brightway.
 
 We have chosen to model all data in a directed graph, i.e. as nodes and (directed) edges. This includes inventory data, which models how processes consume and produce products to form supply chains, but also includes impact assessment, where elementary flows are linked to impact categories via characterization edges, and collections, where processes and products belong to databases.
 
